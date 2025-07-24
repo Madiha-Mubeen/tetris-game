@@ -1,0 +1,94 @@
+:root {
+    --grid-size: 30px;
+    --glow: 0 0 10px rgba(0,255,255,0.6), 0 0 20px rgba(0,255,255,0.4);
+    --bg-dark: #111;
+    --text-light: #fff;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
+    background-color: #111;
+    color: var(--text-light);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Main wrapper */
+.game-wrapper {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+}
+
+/* Sidebars */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #0ff;
+}
+
+.sidebar h2 {
+    margin-bottom: 10px;
+    font-size: 1.4rem;
+}
+
+/*Next piece grid */
+#next-piece {
+    width: calc(var(--grid-size) * 4);
+    height: calc(var(--grid-size) * 4);
+    display: grid;
+    grid-template-columns: repeat(4, var(--grid-size));
+    gap: 2px;
+    background-color: #000;
+    border: 2px solid #0ff;
+    box-shadow: var(--glow);
+    margin-top: 10px;
+}
+
+/* Game Area */
+.game-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.game-title {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #0ff;
+    text-shadow: var(--glow);
+}
+
+/* Tetris Grid */
+#grid {
+    display: grid;
+    grid-template-columns: repeat(10, var(--grid-size));
+    grid-template-rows: repeat(20, var(--grid-size));
+    gap: 2px;
+    background-color: #000;
+    border: 2px solid #0ff;
+    box-shadow: var(--glow);
+}
+
+
+
+ 
+
+
+.info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+}
