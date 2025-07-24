@@ -3,6 +3,7 @@
     --glow: 0 0 10px rgba(0,255,255,0.6), 0 0 20px rgba(0,255,255,0.4);
     --bg-dark: #111;
     --text-light: #fff;
+    --block-size: 24px;
 }
 
 * {
@@ -237,4 +238,55 @@ body {
     font-size: clamp(0.8rem, 2vw, 1rem);
     padding: 8px 16px;
     margin: 0 4px;
+}
+
+@media screen and (max-width: 768px) {
+    :root {
+        --block-size: 18px;
+    }
+
+    canvas#tetris {
+        width: calc(var(--block-size) * 10);
+        height: calc(var(--block-size) * 20);
+    }
+
+    canvas#next {
+        width: calc(var(--block-size) * 4);
+        height: calc(var(--bloack-size) * 4);
+    }
+
+    .controls button {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    :root {
+        --block-size: 14px;
+    }
+
+    h1 {
+        font-size: 1.2px;
+    }
+
+    .score,
+    .next-piece {
+        font-size: 0.9rem;
+    }
+
+    .controls button {
+        font-size: 10px;
+        padding: 5px 8px;
+    }
+}
+
+#tetris {
+    width: calc(var(--block-size) * 10);
+    height: calc(var(--block-size) * 20);
+}
+
+#next {
+    width: calc(var(--block-size) * 4);
+    height: calc(var(--block-size) * 4);
 }
