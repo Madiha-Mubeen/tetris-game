@@ -1,5 +1,5 @@
 :root {
-    --grid-size: 30px;
+    --grid-size: min(6vw, 6vh, 32px);
     --glow: 0 0 10px rgba(0,255,255,0.6), 0 0 20px rgba(0,255,255,0.4);
     --bg-dark: #111;
     --text-light: #fff;
@@ -7,27 +7,36 @@
 
 * {
     box-sizing: border-box;
-    margin: 0;
+    margin: 0; 
     padding: 0;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
-    background-color: #111;
+    font-family: 'Orbitron', sans-serif;
+    background-color: #0d0d0d;
     color: var(--text-light);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    overflow: hidden;
+    height: auto;
+    overflow: auto;
+    overflow-x: hidden;
+    padding:  0;
+    margin: 0;
+    min-height: 100vh;
 }
 
 /* Main wrapper */
 .game-wrapper {
     display: flex;
-    gap: 40px;
-    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 20px;
+    width: 100%;
+    max-width: 1200px;
 }
 
 /* Sidebars */
@@ -35,9 +44,25 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: #0ff;
+    color: cyan;
+    text-align: center;
+    font-size: clamp(14px, 2vw, 18px);
+
 }
 
+.cell {
+    width: var(--grid-size);
+    height: var(--grid-size);
+    border: 1px solid #222;
+    box-sizing: border-box;
+}
+
+.next, .score {
+    border: 2px solid cyan;
+    padding: 10px;
+    box-shadow: 0 0 10px cyan;
+    margin-bottom: 20px;
+}
 .sidebar h2 {
     margin-bottom: 10px;
     font-size: 1.4rem;
@@ -79,16 +104,137 @@ body {
     background-color: #000;
     border: 2px solid #0ff;
     box-shadow: var(--glow);
+    width: calc(var(--grid-size) * 10 + 18px);
+    height: calc(var(--grid-size) * 20 + 38px);
 }
 
+#grid div,
+#next-piece div {
+    width: var(--grid-size);
+    height: var(--grid-size);
+    background-color: #111;
+    border-radius: 4px;
+}
 
+/*Glowing Tetromino Black */
+.tetromino {
+    background: linear-gradient(45deg, #0ff, #00f); 
+    box-shadow: var(--glow);
+}
 
- 
+/*Start Button */
+.buttons {
+    margin-top: 20px;
+    font-size: 22px;
+}
 
+#start-button {
+    padding: 10px 20px;
+    background-color: #0ff;
+    color: #111;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 10px #0ff;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+#start-button:hover {
+    background-color: #0ff;
+    color: #fff;
+    box-shadow: 0 0 20px #0ff;
+}
+
+#pause-button {
+    padding: 10px 20px;
+    background-color: #0ff;
+    color: #111;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 10px #0ff;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+#pause-button:hover {
+    background-color: #0ff;
+    color: #fff;
+    box-shadow: 0 0 20px #0ff;
+}
+
+#reset-button {
+    padding: 10px 20px;
+    background-color: #0ff;
+    color: #111;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 10px #0ff;
+}
+
+#reset-button:hover {
+    background-color: #0ff;
+    color: #fff;
+}
 
 .info {
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 10px;
+}
+
+@media (max-width: 1024px) {
+    :root {
+        --grid-size: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --grid-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --grid-size: 16px;
+    }
+}
+
+@media (max-width: 600px) {
+    .game-wrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .sidebar {
+        order: 1;
+        width: 100%;
+        max-width: 400px;
+        margin-bottom: 20px;
+    }
+
+    .game-area {
+        order: 2;
+    }
+
+    .right {
+        order: 3;
+    }
+}
+
+@media (min-width: 600px) and (max-width: 900px) {
+    :root {
+        --grid-size: 22px;
+    }
+}
+
+.buttons button {
+    font-size: clamp(0.8rem, 2vw, 1rem);
+    padding: 8px 16px;
+    margin: 0 4px;
 }
