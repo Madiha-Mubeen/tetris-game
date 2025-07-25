@@ -13,11 +13,11 @@
             <h2>Next</h2>
             <div id="next-piece"></div>
         </div>
-
+  
         <!--Game Board -->
         <div class="game-area"> 
             <h1 class="game-title">TETRIS</h1>
-            <div id="grid"></div>
+            <div id="grid" class="grid"></div>
             <div class="buttons">
                 <button id="start-button">Start</button>
                 <button id="pause-button">Pause</button>
@@ -33,5 +33,12 @@
     </div>
 
     <script src="tetris.js"></script>
+    <script>
+        const nextPieceDiv = document.getElementById('next-piece');
+        for (let i = 0; i < 16; i++) {
+            const div = document.createElement('div');
+            nextPieceDiv.appendChild(div);
+        }
+    </script>
 </body>
 </html>
