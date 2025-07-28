@@ -1,249 +1,200 @@
-document.addEventListener('DOMContentLoaded', () => {
-   const grid = document.querySelector('#grid');
-   const width = 10;
-   const height = 20;
-   const squares = Array.from(Array(width * height), (_, i) => {
-        const div = document.createElement('div');
-        grid.appendChild(div);
-        return div;
-   });
+ const canvas = document.getElementById("tetris");
+const ctx = canvas.getContext("2d");
 
-   //Add bottom border to detect when Ttromino hits the bottom 
-   for (let i = 0; i < width; i++) {
-    const bottomSquare = document.createElement('div');
-    bottomSquare.classList.add('taken');
-    grid.appendChild(bottomSquare);
-   }
+const nextCanvas = document.getElementById("next");
+const nextCtx = nextCanvas.getContext("2d");
 
-   //Tetrominoes definitions
-   const lTetromino = [
-    [1, width+1, width*2+1, 2],
-    [width, width+1, width+2, width*2+2],
-    [1, width+1, width*2+1, width*2],
-    [width, width*2, width*2+1, width*2+2]
-   ];
+const scoreElement = document.getElementById("score");
+const startBtn = document.getElementById("start");
+const pauseBtn = document.getElementById("pause");
+const resetBtn = document.getElementById("reset");
+const soundBtn = document.getElementById("sound");
 
-   const zTetromino = [
-    [0, width, width+1, width*2+1],
-    [width+1, width+2, width*2, width*2+1],
-    [0, width, width+1, width*2+1],
-    [width+1, width+2, width*2, width*2+1]
-   ];
+const ROWS = 20;
+const COLS = 10;
+const BLOCK_SIZE = 20;
 
-   const tTetromino = [
-    [1, width, width+1, width+2],
-    [1, width+1, width+2, width*2+1],
-    [width, width+1, width+2, width*2+1],
-    [1, width, width+1, width*2+1]
-   ];
+ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
+nextCtx.scale(BLOCK_SIZE / 2, BLOCK_SIZE / 2);
 
-   const oTetromino = [
-    [0, 1, width, width+1],
-    [0, 1, width, width+1],
-    [0, 1, width, width+1],
-    [0, 1, width, width+1]
-   ];
+let arena = createMatrix(COLS, ROWS);
+let dropCounter = 0;
+let dropInterval = 1000;
+let lastTime = 0;
+let paused = false;
+let score = 0;
 
-   const iTetromino = [
-    [1, width+1, width*2+1, width*3+1],
-    [width, width+1, width+2, width+3],
-    [1, width+1, width*2+1, width*3+1],
-    [width, width+1, width+2, width+3]
-   ];
+const colors = [
+  null,
+  "#FF0D72",
+  "#0DC2FF",
+  "#0DFF72",
+  "#F538FF",
+  "#FF8E0D",
+  "#FFE138",
+  "#3877FF",
+];
 
-   const sTetromino = [
-    [1, 2, width, width+1],
-    [0, width, width+1, width*2+1],
-    [1, 2, width, width+1],
-    [0, width, width+1, width*2+1]
-   ];
+const pieces = "TJLOSZI";
 
-   const jTetrominoes = [
-    [1, width+1, width*2+1, width*2],
-    [width, width+1, width+2, width*2+2],
-    [1, width+1, width*2+1, 2],
-    [width, width+1, width+2, 0]
-   ];
+function createPiece(type) {
+  switch (type) {
+    case "T": return [[0,1,0],[1,1,1],[0,0,0]];
+    case "O": return [[2,2],[2,2]];
+    case "L": return [[0,0,3],[3,3,3],[0,0,0]];
+    case "J": return [[4,0,0],[4,4,4],[0,0,0]];
+    case "I": return [[0,5,0,0],[0,5,0,0],[0,5,0,0],[0,5,0,0]];
+    case "S": return [[0,6,6],[6,6,0],[0,0,0]];
+    case "Z": return [[7,7,0],[0,7,7],[0,0,0]];
+  }
+}
 
-   const theTetrominoes = [lTetromino, zTetromino, tTetromino, oTetromino, iTetromino, sTetromino, jTetromino];
-
-   let currentPosition = 4; //starting position of Tetromino
-   let currentRotation = 0; //Starting rotation of Tetromino
-
-   //Random Tetromino 
-   let random = Math.floor(Math.random() * theTetrominoes.length);
-   let current = theTetrominoes[random][currentRotation];
-
-   //Draw the Tetromino
-   const draw = () => {
-    current.forEach(index => {
-        squares[currentPosition + index].classList.add('tetromino');   
+function drawMatrix(matrix, offset, context = ctx) {
+  matrix.forEach((row, y) => {
+    row.forEach((value, x) => {
+      if (value) {
+        context.fillStyle = colors[value];
+        context.fillRect(x + offset.x, y + offset.y, 1, 1);
+      }
     });
-   }
+  });
+}
 
-   //Undraw the Tetromino 
-   const undraw = () => {
-    current.forEach(index => {
-        squares[currentPosition + index].classList.remove('tetromino');
+function createMatrix(w, h) {
+  const matrix = [];
+  while (h--) matrix.push(new Array(w).fill(0));
+  return matrix;
+}
+
+function collide(arena, player) {
+  const [m, o] = [player.matrix, player.pos];
+  return m.some((row, y) => row.some((val, x) => val && (arena[y + o.y] && arena[y + o.y][x + o.x]) !== 0));
+}
+
+function merge(arena, player) {
+  player.matrix.forEach((row, y) => {
+    row.forEach((val, x) => {
+      if (val) arena[y + player.pos.y][x + player.pos.x] = val;
     });
-   }
+  });
+}
 
-   
+function rotate(matrix) {
+  return matrix[0].map((_, i) => matrix.map(row => row[i])).reverse();
+}
 
-   
-   startButton.addEventListener('click', () => {
-    if (timerId) return; //Prevents multiple intervals
-    timerId = setInterval(moveDown, 1000);
-   })
+function playerRotate() {
+  const clone = rotate(player.matrix);
+  const pos = player.pos.x;
+  let offset = 1;
+  while (collide(arena, { matrix: clone, pos: player.pos })) {
+    player.pos.x += offset;
+    offset = -(offset + (offset > 0 ? 1 : -1));
+    if (offset > clone[0].length) return;
+  }
+  player.matrix = clone;
+}
 
-   //Move down every second
-   const moveDown = () => {
-    undraw();
-    currentPosition += width;
-    draw();
-    freeze();
-   }
+function playerDrop() {
+  player.pos.y++;
+  if (collide(arena, player)) {
+    player.pos.y--;
+    merge(arena, player);
+    resetPlayer();
+    arenaSweep();
+    updateScore();
+  }
+  dropCounter = 0;
+}
 
-   //Freeze Tetromino when it hits the bottom or another Tetromino
-   const freeze = () => {
-    if (
-        current.some(index => 
-            squares[currentPosition + index + width].classList.contains('taken')
-        )
-    ) {
-        current.forEach(index => 
-            squares[currentPosition + index].classList.add('taken')
-        );
-        //Start a new Tetromino
-        random = nextRandom;
-        nextRandom = Math.floor(Math.random() * theTetrominoes.length);
-        current = theTetrominoes[random][currentRotation];
-        currentPosition = 4; //Reset position
-        draw();
-        displayNext();
-        addScore();
-        gameOver();
+function playerMove(dir) {
+  player.pos.x += dir;
+  if (collide(arena, player)) player.pos.x -= dir;
+}
+
+function arenaSweep() {
+  outer: for (let y = arena.length - 1; y >= 0; y--) {
+    if (arena[y].every(v => v)) {
+      const row = arena.splice(y, 1)[0].fill(0);
+      arena.unshift(row);
+      y++;
+      score += 10;
     }
-   };
-    
-   const moveLeft = () => {
-    undraw();
-    const isAtLeftEdge = current.some(index => (currentPosition + index) % width === 0);
-    if (!isAtLeftEdge && !current.some(index => squares[currentPosition + index - 1].classList.contains('taken'))) {
-        currentPosition -= 1;
-    }
-    draw();
-   };
+  }
+}
 
-   const moveRight = () => {
-    undraw();
-    const isAtRightEdge = current.some(index => (currentPosition + index) % width === width - 1);
-    if (!isAtRightEdge && !current.some(index => squares[curtentPosition + index + 1].classList.contains('taken'))) {
-        currentPosition += 1;
-    }
-    draw();
-   };
+function updateScore() {
+  scoreElement.innerText = score;
+}
 
-   const rotate = () => {
-    undraw();
-    currentRotation++;
-    if (currentRotation ===  theTetrominoes[random].length) currentRotation = 0;
-        currentRotation = theTetrominoes[random][currentRotation];
-        draw();
-   };
-
-   const control = (e) => {
-    if (e.key === 'ArrowLeft') moveLeft();
-    else if (e.key === 'ArrowRight') moveRight();
-    else if (e.key === 'ArrowDown') moveDown();
-    else if (e.key === 'ArrowUp') rotate();
-   };
-   document.addEventListener('keydown', control);
-
-   //Timer
-   let timerId;
-   const startButton = document.getElementById('start-button');
-   const pauseButton = document.getElementById('pause-button');
-   const resetButton = document.getElementById('reset-button');
-   let score = 0;
-
-   startButton.addEventListener('click', () => {
-    if (!timerId) {
-        draw();
-        timerId = setInterval(moveDown, 800);
-        displayNext();
-    }
-   });
-
-   pauseButton.addEventListener('click', () => {
-    if (timerId) {
-        clearInterval(timerId);
-        timerId = null;
-    }
-   });
-
-   resetButton.addEventListener('click', () => {
-    clearInterval(timerId);
-    timerId = null;
-    squares.forEach(sq => {
-        sq,classList.remove('tetromino', 'taken');
-    });
-    currentPosition = 4;
+function resetPlayer() {
+  player.matrix = next;
+  next = createPiece(pieces[Math.floor(Math.random() * pieces.length)]);
+  player.pos.y = 0;
+  player.pos.x = Math.floor((COLS - player.matrix[0].length) / 2);
+  if (collide(arena, player)) {
+    arena = createMatrix(COLS, ROWS);
     score = 0;
-    scoreDisplay.textContent = score;
-    random = Math.floor(Math.random() * theTetrominoes.length);
-    currentRotation = 0;
-    current = theTetrominoes[random][currentRotation];
+    updateScore();
+  }
+  drawNext();
+}
+
+function drawNext() {
+  nextCtx.clearRect(0, 0, nextCanvas.width, nextCanvas.height);
+  drawMatrix(next, { x: 0, y: 0 }, nextCtx);
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawMatrix(arena, { x: 0, y: 0 });
+  drawMatrix(player.matrix, player.pos);
+}
+
+function update(time = 0) {
+  const deltaTime = time - lastTime;
+  lastTime = time;
+  if (!paused) {
+    dropCounter += deltaTime;
+    if (dropCounter > dropInterval) playerDrop();
     draw();
-   });
+  }
+  requestAnimationFrame(update);
+}
 
-   //Show next tetromino
-   const displaySquares = document.querySelectorAll('#next-piece div');
-   const displayWidth = 4;
-   const upNextTetrominoes = [
-    [1, displayWidth+1, displayWidth*2+1, 2],   //L
-    [0, displayWidth, displayWidth+1, displayWidth*2+1],    //Z
-    [1, displayWidth, displayWidth+1, displayWidth+2],   //T
-    [0, 1, displayWidth, displayWidth+1],   //O
-    [1, displayWidth+1, displayWidth*2+1, displayWidth*3+1],   //I
-    [1, 2, displayWidth, displayWidth+1],   //S
-    [1, displayWidth+1, displayWidth*2+1, displayWidth*2]    //J
-   ];
-
-   let nextRandom = Math.floor(Math.random() * theTetrominoes.length);
-   
-
-   const displayNext = () => {
-    displaySquares.forEach(squares => squares.classList.remove('tetromin'));
-    upNextTetrominoes[nextRandom].forEach(index => {
-        displaySquares[index].classList.add('tetromino');
-    });
-   };
-
-   //Score logic 
-   function addScore() {
-    for (let i = 0; i < width * height; i += width) {
-        const row = Array.from({length: width }, (_,k) => i + k);
-        if (row.every(index => squares[index].classList.contains('taken'))) {
-            row.forEach(index => {
-                squares[index].classList.remove('taken', 'tetromino');
-            });
-            const removed = squares.splice(i, width);
-            squares.unshift(...removed);
-            squares.forEach(square => grid.appendChild(square));
-            score += 10;
-            scoreDisplay.textContent = score;
-        }
-    }
-   }
-    
-
-   //Game over logic
-   function gameOver() {
-    if (current.some(index => squares[currentPosition + index].contains('taken'))) {
-        clearInterval(timerId);
-        timerId = null;
-        alert('Game Over!');
-    }
-   }
+document.addEventListener("keydown", (e) => {
+  if (paused) return;
+  if (e.key === "ArrowLeft") playerMove(-1);
+  else if (e.key === "ArrowRight") playerMove(1);
+  else if (e.key === "ArrowDown") playerDrop();
+  else if (e.key === "ArrowUp") playerRotate();
 });
+
+startBtn.onclick = () => {
+  paused = false;
+  update();
+};
+
+pauseBtn.onclick = () => {
+  paused = !paused;
+};
+
+resetBtn.onclick = () => {
+  arena = createMatrix(COLS, ROWS);
+  score = 0;
+  updateScore();
+  resetPlayer();
+};
+
+soundBtn.onclick = () => {
+  alert("🔊 Sound feature coming soon!");
+};
+
+let next = createPiece(pieces[Math.floor(Math.random() * pieces.length)]);
+let player = {
+  pos: { x: 0, y: 0 },
+  matrix: null,
+};
+
+resetPlayer();
+update();

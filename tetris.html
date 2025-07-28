@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -11,17 +11,26 @@
         <!--Next Piece Panel-->
         <div class="sidebar left">
             <h2>Next</h2>
-            <div id="next-piece"></div>
+            <canvas id="next-piece" width="120" height="120"></canvas>
         </div>
   
         <!--Game Board -->
         <div class="game-area"> 
             <h1 class="game-title">TETRIS</h1>
-            <div id="grid" class="grid"></div>
+            <canvas id="board" width="300" height="600"></canvas>
+
             <div class="buttons">
                 <button id="start-button">Start</button>
                 <button id="pause-button">Pause</button>
                 <button id="reset-button">Reset</button>
+            </div>
+
+            <!--Mobile Controls-->
+            <div class="Controls">
+                <button id="left-btn">←</button>
+                <button id="right-btn">→</button>
+                <button id="down-btn">↓</button>
+                <button id="rotate-btn">⟳</button>
             </div>
         </div>
 
@@ -29,16 +38,22 @@
         <div class="sidebar right">
             <h2>Score</h2>
             <div id="score">0</div>
+            <h3>Lines</h3>
+            <div id="lines">0</div>
+            <h3>Level</h3>
+            <div id="level">1</div>
         </div>
     </div>
 
+    <!--Game Over Popup-->
+    <div id="game-over-popup" class="game-over">
+        <h2>Game Over</h2>
+        <p>Your Score: <span id="final-score">0</span></p>
+        <button id="restart-button">Restart</button>
+    </div>
+
     <script src="tetris.js"></script>
-    <script>
-        const nextPieceDiv = document.getElementById('next-piece');
-        for (let i = 0; i < 16; i++) {
-            const div = document.createElement('div');
-            nextPieceDiv.appendChild(div);
-        }
+    
     </script>
 </body>
-</html>
+</html> 
