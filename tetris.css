@@ -75,6 +75,7 @@ body {
   letter-spacing: 5px;
   background: linear-gradient(90deg, #00f2fe, #4facfe);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   text-align: center;
 }
@@ -249,4 +250,127 @@ body {
 .Controls button:hover {
     background: linear-gradient(145deg, #8b0a90, #6a0572);
     box-shadow: 0 6px 15px rgba(139, 10, 144, 0.5);
+}
+
+.game-over {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(20, 20, 20, 0.95);
+  padding: 2rem;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(255, 0, 0, 0.4);
+  z-index: 999;
+}
+
+.game-over h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #ff3366;
+}
+
+#restart-button {
+  padding: 0.6rem 1.5rem;
+  font-size: 1rem;
+  background: linear-gradient(to right, #ff416c, #ff4b2b);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#restart-button:hover {
+  transform: scale(1.05);
+}
+
+/* Sidebar Container */
+.sidebar.left {
+  background: rgba(255, 255, 255, 0.06);
+  padding: 1rem;
+  border-radius: 16px;
+  width: 160px;
+  text-align: center;
+  box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+/* Next Title */
+.sidebar.left h2 {
+  font-size: 1rem;
+  color: #00e6e6;
+  margin-bottom: 0.3rem;
+  letter-spacing: 1px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  width: 100%;
+  padding-bottom: 0.3rem;
+}
+
+/* Canvas Container for Glow Effect */
+.next-piece-wrapper {
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px solid rgba(0, 255, 255, 0.3);
+  border-radius: 10px;
+  padding: 6px;
+  box-shadow: 0 0 12px rgba(0, 255, 255, 0.2);
+  backdrop-filter: blur(2px);
+  display: inline-block;
+}
+
+/* Canvas Style */
+#next-piece-canvas {
+  display: block;
+  background-color: #0f0f0f;
+  border-radius: 8px;
+}
+
+.next-piece-wrapper:hover {
+  box-shadow: 0 0 18px rgba(0, 255, 255, 0.4);
+  transform: scale(1.03);
+  transition: all 0.3s ease-in-out;
+}
+
+.mobile-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.mobile-controls .row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.mobile-controls button {
+  padding: 10px 15px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 10px;
+  background: #444;
+  color: white;
+  transition: 0.2s;
+}
+
+.mobile-controls button:active {
+  background: #666;
+}
+
+@media (max-width: 768px) {
+  canvas {
+    width: 100%;
+    height: auto;
+  }
+
+  .game-container {
+    flex-direction: column;
+    align-items: center;
+  }
 }
