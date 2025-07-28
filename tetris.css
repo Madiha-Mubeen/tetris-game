@@ -1,411 +1,252 @@
-/*:root {
-    --grid-size: min(6vw, 6vh, 32px);
-    --glow: 0 0 10px rgba(0,255,255,0.6), 0 0 20px rgba(0,255,255,0.4);
-    --bg-dark: #111;
-    --text-light: #fff;
-    --block-size: 24px;
-}
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap'); /* Example import */
 
+/* Reset and Base Styles */
 * {
-    box-sizing: border-box;
-    margin: 0; 
-    padding: 0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-    font-family: 'Orbitron', sans-serif;
-    background-color: #0d0d0d;
-    color: var(--text-light);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: auto;
-    overflow: auto;
-    overflow-x: hidden;
-    padding:  0;
-    margin: 0;
-    min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a21, #16213e);
+  background-image: url('tetris-bg.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: #f5f5f5;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  font-family: 'Press Start 2P', cursive;
 }
 
-/* Main wrapper *
+/* Game Wrapper */
 .game-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 20px;
-    width: 100%;
-    max-width: 1200px;
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.7);
+  flex-wrap: wrap;
+  max-width: 1200px;
+  width: 100%;
+  backdrop-filter: blur(8px);
 }
 
-/* Sidebars *
+/* Sidebar Styles */
 .sidebar {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: cyan;
-    text-align: center;
-    font-size: clamp(14px, 2vw, 18px);
-
+  background: rgba(255, 255, 255, 0.06);
+  padding: 1rem;
+  border-radius: 16px;
+  width: 140px;
+  text-align: center;
+  box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.05);
 }
 
-.cell {
-    width: var(--grid-size);
-    height: var(--grid-size);
-    border: 1px solid #222;
-    box-sizing: border-box;
-}
-
-.next, .score {
-    border: 2px solid cyan;
-    padding: 10px;
-    box-shadow: 0 0 10px cyan;
-    margin-bottom: 20px;
-}
 .sidebar h2 {
-    margin-bottom: 10px;
-    font-size: 1.4rem;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  color: #00e6e6;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 0.5rem;
 }
 
-/*Next piece grid *
-#next-piece {
-    width: calc(var(--grid-size) * 4);
-    height: calc(var(--grid-size) * 4);
-    display: grid;
-    grid-template-columns: repeat(4, var(--grid-size));
-    gap: 2px;
-    background-color: #000;
-    border: 2px solid #0ff;
-    box-shadow: var(--glow);
-    margin-top: 10px;
+#score {
+  font-size: 2rem;
+  color: #00ffc8;
+  font-weight: bold;
 }
 
-/* Game Area *
+/* Game Area */
 .game-area {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
 }
 
 .game-title {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-    color: #0ff;
-    text-shadow: var(--glow);
-}
-
-/* Tetris Grid *
-#grid {
-    display: grid;
-    grid-template-columns: repeat(10, var(--grid-size));
-    grid-template-rows: repeat(20, var(--grid-size));
-    gap: 2px;
-    background-color: #000;
-    border: 2px solid #0ff;
-    box-shadow: var(--glow);
-    width: calc(var(--grid-size) * 10 + 18px);
-    height: calc(var(--grid-size) * 20 + 38px);
-}
-
-#grid div,
-#next-piece div {
-    width: var(--grid-size);
-    height: var(--grid-size);
-    background-color: #111;
-    border-radius: 4px;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    width: min(100vw, 400px);
-    max-width: 100%;
-    aspect-ratio: 10 / 20;
-    border: 2px solid #333;
-    background: #f0f0f0;
-}
-
-.grid div {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    box-sizing: border-box;
-    border: 0.5px solid #ccc;
-}
-
-/*Glowing Tetromino Black *
-.tetromino {
-    background: linear-gradient(45deg, #0ff, #00f); 
-    box-shadow: var(--glow);
-}
-
-/*Start Button *
-.buttons {
-    margin-top: 20px;
-    font-size: 22px;
-}
-
-#start-button {
-    padding: 10px 20px;
-    background-color: #0ff;
-    color: #111;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 0 10px #0ff;
-    transition: background 0.3s ease, color 0.3s ease;
-}
-
-#start-button:hover {
-    background-color: #0ff;
-    color: #fff;
-    box-shadow: 0 0 20px #0ff;
-}
-
-#pause-button {
-    padding: 10px 20px;
-    background-color: #0ff;
-    color: #111;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 0 10px #0ff;
-    transition: background 0.3s ease, color 0.3s ease;
-}
-
-#pause-button:hover {
-    background-color: #0ff;
-    color: #fff;
-    box-shadow: 0 0 20px #0ff;
-}
-
-#reset-button {
-    padding: 10px 20px;
-    background-color: #0ff;
-    color: #111;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 0 10px #0ff;
-}
-
-#reset-button:hover {
-    background-color: #0ff;
-    color: #fff;
-}
-
-.info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 10px;
-}
-
-@media (max-width: 1024px) {
-    :root {
-        --grid-size: 20px;
-    }
-}
-
-@media (max-width: 768px) {
-    :root {
-        --grid-size: 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    :root {
-        --grid-size: 16px;
-    }
-}
-
-@media (max-width: 600px) {
-    .game-wrapper {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .sidebar {
-        order: 1;
-        width: 100%;
-        max-width: 400px;
-        margin-bottom: 20px;
-    }
-
-    .game-area {
-        order: 2;
-    }
-
-    .right {
-        order: 3;
-    }
-}
-
-@media (min-width: 600px) and (max-width: 900px) {
-    :root {
-        --grid-size: 22px;
-    }
-}
-
-.buttons button {
-    font-size: clamp(0.8rem, 2vw, 1rem);
-    padding: 8px 16px;
-    margin: 0 4px;
-}
-
-@media screen and (max-width: 768px) {
-    :root {
-        --block-size: 18px;
-    }
-
-    canvas#tetris {
-        width: calc(var(--block-size) * 10);
-        height: calc(var(--block-size) * 20);
-    }
-
-    canvas#next {
-        width: calc(var(--block-size) * 4);
-        height: calc(var(--bloack-size) * 4);
-    }
-
-    .controls button {
-        font-size: 12px;
-        padding: 6px 10px;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    :root {
-        --block-size: 14px;
-    }
-
-    h1 {
-        font-size: 1.2px;
-    }
-
-    .score,
-    .next-piece {
-        font-size: 0.9rem;
-    }
-
-    .controls button {
-        font-size: 10px;
-        padding: 5px 8px;
-    }
-}
-
-#tetris {
-    width: calc(var(--block-size) * 10);
-    height: calc(var(--block-size) * 20);
-}
-
-#next {
-    width: calc(var(--block-size) * 4);
-    height: calc(var(--block-size) * 4);
-}
-*/
-
-/* Reset & Font */
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #1e1e2f, #2b5876);
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.container {
-  text-align: center;
-  max-width: 900px;
-  width: 100%;
-  padding: 20px;
-}
-
-h1 {
   font-size: 3rem;
-  margin-bottom: 1rem;
-  color: #f1c40f;
-  letter-spacing: 3px;
-}
-
-.game-area {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 40px;
-}
-
-canvas#board {
-  background-color: #111;
-  border: 2px solid #fff;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-}
-
-canvas#next {
-  background-color: #222;
-  margin-top: 10px;
-  border: 2px dashed #888;
-}
-
-/* Info Panel */
-.info-panel {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.score {
-  font-size: 1.5rem;
-  margin-bottom: 20px;
-}
-
-.controls {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-button {
-  padding: 10px 20px;
-  font-size: 1rem;
   font-weight: bold;
-  border: none;
-  border-radius: 8px;
-  background: #3498db;
-  color: #fff;
-  transition: 0.3s;
-  cursor: pointer;
-}
-button:hover {
-  background: #2980b9;
+  letter-spacing: 5px;
+  background: linear-gradient(90deg, #00f2fe, #4facfe);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
 }
 
-@media screen and (max-width: 768px) {
-  .game-area {
+#grid {
+  display: grid;
+  grid-template-columns: repeat(10, 30px);
+  grid-template-rows: repeat(20, 30px);
+  gap: 1px;
+  background-color: #0f0f0f;
+  border: 3px solid #00f3fe;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+}
+
+.grid-cell {
+  width: 30px;
+  height: 30px;
+  background-color: #1c1c1c;
+  border-radius: 4px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+/* Game Buttons */
+.button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #00f2fe, #4facfe);
+  color: #0a0a0a;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+  box-shadow: 0 5px 15px rgba(79, 195, 247, 0.2);
+}
+
+.button:hover {
+  background: linear-gradient(90deg, #4facfe, #00f2fe);
+  transform: scale(1.05);
+}
+
+#next-piece,
+#next {
+  width: 120px;
+  height: 120px;
+  border: 2px solid #4facfe;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 1px;
+  background-color: #0f0f0f;
+  border-radius: 8px;
+  box-shadow: inset 0 0 10px rgba(0, 255, 255, 0.2);
+}
+
+#board {
+  display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .game-wrapper {
     flex-direction: column;
     align-items: center;
+    padding: 1rem;
   }
 
-  h1 {
-    font-size: 2rem;
+  .sidebar {
+    width: 90%;
   }
 
-  .controls {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
+  .game-title {
+    font-size: 2.2rem;
   }
+
+  #grid {
+    grid-template-columns: repeat(10, 25px);
+    grid-template-rows: repeat(20, 25px);
+  }
+
+  .grid-cell {
+    width: 25px;
+    height: 25px;
+  }
+
+  button {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+  }
+
+  #next-piece,
+  #next {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+/* Controls Section */
+.Controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.Controls button {
+  padding: 12px 18px;
+  font-size: 22px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(to right, #3f87a6, #ebf8e1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  color: #222;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.Controls button:hover {
+  transform: scale(1.1);
+  background: linear-gradient(to right, #3f87a6, #c4f0c2);
+}
+
+@media screen and (max-width: 600px) {
+  .Controls button {
+    font-size: 20px;
+    padding: 10px 14px;
+    flex: 1 1 45%;
+  }
+
+  .sidebar {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* General Button Styles */
+.top-controls button,
+.Controls button {
+    padding: 0.8rem 1.5rem; /* Slightly more padding */
+    border: none;
+    border-radius: 8px; /* Consistent rounded corners */
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out; /* Smoother transitions */
+    color: #fff; /* White text for better contrast */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4); /* Text shadow for pop */
+    letter-spacing: 0.5px;
+    background: linear-gradient(145deg, #00b4d8, #0077b6); /* More consistent blue gradient */
+    box-shadow: 0 5px 15px rgba(0, 119, 182, 0.4);
+}
+
+.top-controls button:hover,
+.Controls button:hover {
+    transform: translateY(-2px) scale(1.02); /* Lift and slightly scale */
+    box-shadow: 0 8px 20px rgba(0, 119, 182, 0.6); /* More prominent shadow on hover */
+    background: linear-gradient(145deg, #0077b6, #00b4d8); /* Reverse gradient on hover */
+}
+
+.top-controls button:active,
+.Controls button:active {
+    transform: translateY(1px); /* Press effect */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); /* Flatter shadow when pressed */
+}
+
+/* Specific Mobile Controls (if you want different styles) */
+.Controls button {
+    background: linear-gradient(145deg, #6a0572, #8b0a90); /* Distinct color for mobile controls */
+    box-shadow: 0 4px 12px rgba(139, 10, 144, 0.3);
+}
+
+.Controls button:hover {
+    background: linear-gradient(145deg, #8b0a90, #6a0572);
+    box-shadow: 0 6px 15px rgba(139, 10, 144, 0.5);
 }
