@@ -1,17 +1,17 @@
 ﻿# tetris-game
-A fully responsive <b>Tetris game<b> built using <b>html<b>, <b>CSS<b>, and <b>JavaScript. This is playable with an enhanced UI, mobile support, and on-screen arrow controls. 
+A fully responsive **Tetris game** built using **html**, **CSS**, and **JavaScript**. This is playable with an enhanced UI, mobile support, and on-screen arrow controls. 
 
-##Features
+**##Features**
 + Falling blocks rendered using HTML5 Canvas
 + Arrow key and on-screen button controls
 + Game over detection
 + colorful block styling and background
 
-##Live Demo 
+**##Live Demo**
 Play the game : https://madiha-mubeen.github.io/tetris-game/
 
-##Controls
-<keyboard:<b>
+**##Controls**
+keyboard:
 - `←` - Move left
 - `→` - Move right
 - `↓` - Soft drop
