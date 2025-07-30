@@ -11,14 +11,14 @@ A fully responsive **Tetris game** built using **html**, **CSS**, and **JavaScri
 Play the game : https://madiha-mubeen.github.io/tetris-game/
 
 **##Controls**
-keyboard:
+<br>keyboard:
 - `←` - Move left
 - `→` - Move right
 - `↓` - Soft drop
 - `⟳` - Rotate
 - `⤓` - Hard drop
 
-**Difficulties I faced**
+**Difficulties I faced :**
 I have faced alot of issue while creating **JavaScript logic** and while debugging it I have learn how it works. It was great to built this game projects.
 
 **This project is built by Madiha Mubeen for Athena Awards**.
