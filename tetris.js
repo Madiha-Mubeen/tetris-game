@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const ROWS = 20;
     const COLS = 10;
-    const BLOCK_SIZE = 30;
+    const BLOCK_SIZE = 20;
     canvas.width = COLS * BLOCK_SIZE;
     canvas.height = ROWS * BLOCK_SIZE;
     nextCanvas.width = 5 * BLOCK_SIZE;

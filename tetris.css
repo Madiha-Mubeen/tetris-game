@@ -49,16 +49,22 @@ body {
 
 .sidebar h2 {
   margin-bottom: 1rem;
-  font-size: 1.3rem;
+  font-size: 0.9rem;
   color: #00e6e6;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   padding-bottom: 0.5rem;
 }
 
 #score {
-  font-size: 2rem;
+  font-size: 1.5rem;
   color: #00ffc8;
   font-weight: bold;
+}
+
+.sidebar,
+.side.left {
+  width: 120px;
+  padding: 0.5rem;
 }
 
 /* Game Area */
@@ -82,8 +88,8 @@ body {
 
 #grid {
   display: grid;
-  grid-template-columns: repeat(10, 30px);
-  grid-template-rows: repeat(20, 30px);
+  grid-template-columns: repeat(10, 20px);
+  grid-template-rows: repeat(20, 20px);
   gap: 1px;
   background-color: #0f0f0f;
   border: 3px solid #00f3fe;
@@ -92,8 +98,8 @@ body {
 }
 
 .grid-cell {
-  width: 30px;
-  height: 30px;
+  width: 20px;
+  height: 20px;
   background-color: #1c1c1c;
   border-radius: 4px;
   transition: background-color 0.3s ease-in-out;
@@ -119,8 +125,8 @@ body {
 
 #next-piece,
 #next {
-  width: 120px;
-  height: 120px;
+  width: 80px;
+  height: 80px;
   border: 2px solid #4facfe;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -373,4 +379,9 @@ body {
     flex-direction: column;
     align-items: center;
   }
+}
+
+canvas#game-board {
+  width: auto !important;
+  height: auto !important;
 }
