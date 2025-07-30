@@ -21,5 +21,5 @@ Play the game : https://madiha-mubeen.github.io/tetris-game/
 **Difficulties I faced :**
 I have faced alot of issue while creating **JavaScript logic** and while debugging it I have learn how it works. It was great to built this game projects.
 
-**This project is built by Madiha Mubeen for Athena Awards**.
+**This project is built by Madiha Mubeen for Athena Awards**. <br>
 [![Athena Award Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Faward.athena.hackclub.com%2Fapi%2Fbadge)](https://award.athena.hackclub.com?utm_source=readme)
